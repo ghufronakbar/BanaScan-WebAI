@@ -1,0 +1,105 @@
+{% extends "layout.html" %} {% block title %}BananaScanning{% endblock %} {%
+block content %}
+<section
+  class="flex flex-col gap-2 w-full bg-white rounded-xl shadow-lg mx-auto overflow-hidden"
+>
+  <div
+    class="bg-white flex flex-col justify-between h-fit py-2 md:py-4 px-4 md:px-8 text-sm gap-2 w-full min-h-screen items-center relative mt-12"
+  >
+    <div class="w-full flex flex-col gap-4 z-10 bg-transparent">
+      <div class="text-5xl font-bold flex flex-row items-center gap-2">
+        <img
+          src="{{ url_for('static', filename='contact.png') }}"
+          alt="Logo"
+          class="w-16 h-16 object-cover"
+        />
+        Kontak
+      </div>
+      <div class="text-3xl font-bold mt-4">Hubungi</div>
+      <div class="text-xl">
+        Ada pertanyaan atau masukan? Silakan hubungi melalui informasi kontak di
+        bawah
+      </div>
+      <div class="flex flex-col gap-4">
+        <div class="flex flex-col gap-2">
+          <label class="font-bold">Nama</label>
+          <input
+            type="text"
+            class="border border-gray-300 rounded-md p-2"
+            id="nama"
+          />
+        </div>
+        <div class="flex flex-col gap-2">
+          <label class="font-bold">Email</label>
+          <input
+            type="email"
+            class="border border-gray-300 rounded-md p-2"
+            id="email"
+          />
+        </div>
+        <div class="flex flex-col gap-2">
+          <label class="font-bold">Pesan</label>
+          <textarea
+            class="border border-gray-300 rounded-md p-2"
+            id="pesan"
+          ></textarea>
+        </div>
+        <button
+          class="bg-[#2f9fd1] text-white px-8 py-2 text-lg rounded-md w-fit transition-all duration-300 hover:bg-white hover:text-[#2f9fd1] border border-[#2f9fd1] cursor-pointer"
+          onclick="sendMessage()"
+        >
+          Kirim
+        </button>
+      </div>
+      <div class="flex flex-col gap-4 mt-4">
+        <div class="flex flex-row gap-2 items-center">
+          <img
+            src="{{ url_for('static', filename='icon-email.png') }}"
+            alt="Logo"
+            class="w-8 h-8 object-cover"
+          />
+          <div class="text-lg">alvina@gmail.com</div>
+        </div>
+        <div class="flex flex-row gap-2 items-center">
+          <img
+            src="{{ url_for('static', filename='icon-phone.png') }}"
+            alt="Logo"
+            class="w-8 h-8 object-cover"
+          />
+          <div class="text-lg">+62 812 3456-7890</div>
+        </div>
+        <div class="flex flex-row gap-2 items-center">
+          <img
+            src="{{ url_for('static', filename='icon-map.png') }}"
+            alt="Logo"
+            class="w-8 h-8 object-cover"
+          />
+          <div class="text-lg">
+            Jl. Siliwangi, Jombor Lor, Sendangadi, Kec. Mlati, Kabupaten Sleman,
+            Daerah Istimewa Yogyakarta 55285
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    class="bg-[#f0f7fd] flex flex-col md:flex-row md:justify-between h-fit py-2 md:py-4 px-4 md:px-12 text-sm gap-2 w-full items-center relative"
+  >
+    <div class="w-full flex flex-row gap-2 z-10 bg-transparent my-8">
+      <div class="text-md font-bold">Alvina Putri</div>
+      <div class="text-md">5220411038</div>
+    </div>
+  </div>
+</section>
+<script>
+  const sendMessage = () => {
+    const nama = document.getElementById("nama").value;
+    const email = document.getElementById("email").value;
+    const pesan = document.getElementById("pesan").value;
+    window.open(
+      `mailto:alvina@gmail.com?subject=${nama}&body=${pesan + "\n\n" + email}`,
+      "_blank"
+    );
+  };
+</script>
+{% endblock %}

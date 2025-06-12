@@ -1,0 +1,93 @@
+{% extends "layout.html" %} {% block title %}BananaScanning{% endblock %} {%
+block content %}
+<section
+  class="flex flex-col gap-2 w-full bg-white rounded-xl shadow-lg mx-auto overflow-hidden"
+>
+  <div
+    class="bg-white flex flex-col justify-between h-fit py-2 md:py-4 px-4 md:px-8 text-sm gap-2 w-full min-h-screen items-center relative mt-12"
+  >
+    <div class="w-full flex flex-col gap-4 z-10 bg-transparent">
+      <div class="text-5xl font-bold flex flex-row items-center gap-2">
+        <img
+          src="{{ url_for('static', filename='info.png') }}"
+          alt="Logo"
+          class="w-16 h-16 object-cover"
+        />
+        Tentang
+      </div>
+      <div class="flex flex-col-reverse md:flex-row gap-4 w-full items-center">
+        <div class="w-full md:w-1/2">
+          <div class="text-xl">
+            BanaScan adalah sistem AI berbasis CNN yang mengklasifikasikan
+            kesegaran buah pisang melalui analisis citra kulit. Sistem ini
+            mendeteksi pola visual untuk menentukan kesegaran secara otomatis
+            dan akurat.
+          </div>
+          <div class="text-xl">
+            Selain itu, sistem juga mampu mengenali jika gambar yang diunggah
+            bukan pisang dan akan menampilkan pesan kesalahan.
+          </div>
+        </div>       
+      </div>
+    </div>
+    <div class="w-full flex flex-col gap-4 z-10 bg-transparent mt-8">
+      <div class="text-5xl font-bold">Cara Kerja</div>
+      <div class="flex flex-col-reverse md:flex-row gap-4 w-full items-center">
+        <div class="w-full md:w-1/2">
+          <div class="text-xl">
+            <ol class="list-decimal list-inside">
+              <li>Pengguna mengambil atau mengunggah gambar pisang</li>
+              <li>
+                Gambar diproses oleh model CNN untuk mengekstraksi fitur visual
+              </li>
+              <li>
+                Sistem memprediksi kesegaran pisang
+                <ol class="list-disc list-inside">
+                  <li>Pisang Segar</li>
+                  <li>Pisang Tidak Segar</li>
+                </ol>
+              </li>
+              <li>Hasil prediksi ditampilkan beserta akurasinya</li>
+            </ol>
+          </div>
+        </div>
+        <div class="w-full md:w-1/2">
+          <img
+            src="{{ url_for('static', filename='about.png') }}"
+            alt=""
+            class="w-[70%] h-auto object-cover mx-auto"
+          />
+        </div>
+      </div>
+    </div>
+    <div class="w-full flex flex-col gap-4 z-10 bg-transparent my-8">
+      <div class="text-5xl font-bold">Teknologi yang digunakan</div>
+      <div class="text-xl">
+        <ol class="list-disc list-inside">
+          <li>Python + TensorFlow</li>
+          <li>Convolutional Neural Network (CNN)</li>
+          <li>Web Framework Flask</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+  <div
+    class="bg-[#f0f7fd] flex flex-col md:flex-row md:justify-between h-fit py-2 md:py-4 px-4 md:px-12 text-sm gap-2 w-full items-center relative"
+  >
+    <div class="w-full flex flex-row gap-2 z-10 bg-transparent my-8">
+      <div class="text-md font-bold">Alvina Putri</div>
+      <div class="text-md">5220411038</div>
+    </div>
+  </div>
+</section>
+<script>
+  const checkbox = document.getElementById("checkbox");
+  const savedCheckboxState = localStorage.getItem("PLAYSOUND");
+  if (checkbox) {
+    checkbox.checked = savedCheckboxState === "true";
+    checkbox.addEventListener("change", () => {
+      localStorage.setItem("PLAYSOUND", checkbox.checked);
+    });
+  }
+</script>
+{% endblock %}

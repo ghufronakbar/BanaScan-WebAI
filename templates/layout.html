@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>{% block title %}My Flask React App{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- ✅ Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+      }
+    </style>
+  </head>
+  <body
+    class="bg-[#f0f7fd] text-gray-800 flex flex-col relative px-4 md:px-6 lg:px-8 items-center w-full min-h-screen py-20 gap-8"
+  >
+    <!-- NAVBAR -->
+    <div
+      class="fixed top-0 left-0 right-0 z-50 bg-white flex flex-row justify-between items-center h-fit py-2 md:py-4 px-4 md:px-12"
+    >
+      <a class="text-xl font-semibold text-black" href="/">BanaScan</a>
+
+       <div class="flex flex-row gap-4 hidden md:flex">
+        <a class="text-sm text-black hover:text-[#35718c] transition duration-300 ease-in-out" href="/">Beranda</a>
+        <a class="text-sm text-black hover:text-[#35718c] transition duration-300 ease-in-out" href="/scan">Input Gambar</a>
+        <a class="text-sm text-black hover:text-[#35718c] transition duration-300 ease-in-out" href="/about">Tentang</a>
+        <a class="text-sm text-black hover:text-[#35718c] transition duration-300 ease-in-out" href="/contact">Contact</a>
+      </div>
+
+      <!-- Toggle Button for Mobile -->
+      <button
+        id="navbar-toggle"
+        class="text-gray-800 md:hidden block focus:outline-none"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          class="w-6 h-6"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M4 6h16M4 12h16M4 18h16"
+          ></path>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Sidebar Menu (for mobile only) -->
+    <div
+      id="sidebar"
+      class="fixed left-0 top-0 w-64 h-full bg-white z-40 transform -translate-x-full transition-all duration-300 ease-in-out md:hidden"
+    >
+      <div class="flex flex-col p-4">
+        <a
+          class="text-sm text-black hover:text-[#35718c] transition duration-300 ease-in-out mb-4"
+          href="/"
+          >Beranda</a
+        >
+        <a
+          class="text-sm text-black hover:text-[#35718c] transition duration-300 ease-in-out mb-4"
+          href="/scan"
+          >Input Gambar</a
+        >
+        <a
+          class="text-sm text-black hover:text-[#35718c] transition duration-300 ease-in-out mb-4"
+          href="/about"
+          >Tentang</a
+        >
+        <a
+          class="text-sm text-black hover:text-[#35718c] transition duration-300 ease-in-out"
+          href="/contact"
+          >Contact</a
+        >
+      </div>
+    </div>
+
+    <!-- Script -->
+    {% block content %}{% endblock %}
+
+    <!-- Footer -->
+    <div
+      class="bg-white flex flex-col h-fit py-2 md:py-4 px-4 md:px-8 text-sm gap-2 w-full mx-auto rounded-lg shadow-lg"
+    >
+      <div class="flex flex-row gap-2 items-center">
+        <img
+          src="{{ url_for('static', filename='logo.png') }}"
+          alt="Logo"
+          class="w-8 h-8 object-cover"
+        />
+        <p class="font-bold">Bana<span class="font-normal">Scan</span></p>
+      </div>
+      <div class="text-xs">&copy; 2025 BanaScan - All rights reserved</div>
+    </div>
+
+    <!-- JavaScript to Toggle Navbar on Mobile -->
+    <script>
+      const toggleButton = document.getElementById("navbar-toggle");
+      const sidebar = document.getElementById("sidebar");
+
+      toggleButton.addEventListener("click", () => {
+        // Toggle the sidebar open and close with animation
+        sidebar.classList.toggle("-translate-x-full"); // Toggle the menu (translate in/out)
+        sidebar.classList.toggle("translate-x-0"); // This will make the sidebar appear
+      });
+    </script>
+  </body>
+</html>

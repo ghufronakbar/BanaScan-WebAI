@@ -1,0 +1,264 @@
+{% extends "layout.html" %} {% block title %}BananaScanning{% endblock %} {%
+block content %}
+<section
+  class="flex flex-col gap-2 w-full bg-white rounded-xl shadow-lg mx-auto overflow-hidden"
+>
+  <div
+    class="bg-white flex flex-row justify-between h-fit py-2 md:py-4 px-4 md:px-8 text-sm gap-2 w-full min-h-screen items-center relative"
+  >
+    <div class="w-full md:w-[50%] flex flex-col gap-4 z-10 bg-transparent">
+      <div class="text-5xl font-bold">Input Gambar</div>
+      <div class="text-xl">
+        Silakan unggah gambar pisan yang akan diklasifikasikan
+      </div>
+    </div>
+    <div class="hidden md:flex w-[50%] flex-row items-center justify-center">
+      <img
+        src="{{ url_for('static', filename='logo.png') }}"
+        alt="Logo"
+        class="w-[70%] h-auto object-cover"
+      />
+    </div>
+    <div
+      class="w-full md:w-[50%] flex flex-col items-center md:relative md:top-0 md:left-0 md:transform-none absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 md:hidden"
+    >
+      <img
+        src="{{ url_for('static', filename='logo.png') }}"
+        alt="Logo"
+        class="w-[70%] h-auto object-cover"
+      />
+    </div>
+  </div>
+
+  <form
+    class="w-full p-8"
+    action="{{ url_for('result') }}"
+    method="POST"
+    enctype="multipart/form-data"
+  >
+    <div
+      class="border border-gray-300 border-2 border-dashed border-[#2f9fd1] rounded-lg p-4 flex flex-col items-center justify-center py-20 gap-4"
+    >
+      <p class="text-lg font-semibold">Seret Gambar kesini, atau</p>
+
+      <div class="flex flex-row items-center gap-4">
+        <!-- File picker button -->
+        <label
+          for="file-input"
+          class="inline-flex h-10 w-auto items-center justify-center rounded-md bg-[#2f9fd1] text-white px-4 text-sm font-medium transition-colors hover:text-[#2f9fd1] hover:bg-white border border-[#2f9fd1] cursor-pointer w-fit"
+        >
+          Pilih File
+        </label>
+        <!-- Open camera button -->
+        <button
+          class="inline-flex h-10 w-auto items-center justify-center rounded-md bg-[#2f9fd1] text-white px-4 text-sm font-medium transition-colors hover:text-[#2f9fd1] hover:bg-white border border-[#2f9fd1] cursor-pointer w-fit"
+          type="button"
+          id="open-camera"
+        >
+          Kamera
+        </button>
+      </div>
+      <input
+        id="file-input"
+        type="file"
+        name="file"
+        accept="image/*"
+        class="hidden"
+        onchange="previewImage(event)"
+      />
+
+      <!-- Camera Container (hidden by default) -->
+      <div id="camera-container" class="hidden mt-4">
+        <!-- Video element to show camera stream -->
+        <video
+          id="camera-preview"
+          autoplay
+          playsinline
+          class="w-full h-auto rounded-lg mb-4"
+        ></video>
+
+        <!-- Camera buttons -->
+        <div class="flex gap-4 justify-center">
+          <button
+            type="button"
+            id="capture-btn"
+            class="bg-green-500 text-white px-4 py-2 rounded-md"
+          >
+            Capture
+          </button>
+          <button
+            type="button"
+            id="cancel-camera"
+            class="bg-red-500 text-white px-4 py-2 rounded-md"
+          >
+            Batal
+          </button>
+        </div>
+      </div>
+
+      <!-- Hidden input to store captured image -->
+      <input type="hidden" id="camera-image-data" name="camera_image" />
+
+      <p class="text-xs text-gray-500">
+        JPEG &nbsp; | &nbsp; JPG &nbsp; | &nbsp; PNG &nbsp; | maks. 5MB
+      </p>
+
+      <!-- Preview Image -->
+      <div id="image-preview" class="mt-4 hidden">
+        <img
+          id="preview-img"
+          src=""
+          alt="Image Preview"
+          class="max-w-full rounded-lg shadow-md"
+        />
+      </div>
+
+      <!-- Submit Button (Form submission) -->
+
+      <div class="flex flex-col items-center w-full">
+        <button
+          type="submit"
+          class="bg-[#2f9fd1] text-white px-4 py-2 rounded-md w-full md:w-1/2 transition-all duration-300 hover:bg-white hover:text-[#2f9fd1] border border-[#2f9fd1] w-fit"
+        >
+          Prediksi
+        </button>
+        {% if error_message %}
+        <p class="mt-4 text-sm text-red-500">{{ error_message }}</p>
+        {% endif %}
+      </div>
+    </div>
+  </form>
+
+  <div
+    class="bg-[#f0f7fd] flex flex-col md:flex-row md:justify-between h-fit py-2 md:py-4 px-4 md:px-12 text-sm gap-2 w-full items-center relative"
+  >
+    <div class="w-full flex flex-row gap-2 z-10 bg-transparent my-8">
+      <div class="text-md font-bold">Alvina Putri</div>
+      <div class="text-md">5220411038</div>
+    </div>
+  </div>
+</section>
+
+<script>
+  // Handle image file input change (preview)
+  function previewImage(event) {
+    const file = event.target.files[0];
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      const imgElement = document.getElementById("preview-img");
+      const previewDiv = document.getElementById("image-preview");
+
+      imgElement.src = e.target.result;
+      previewDiv.classList.remove("hidden"); // Show preview div
+    };
+    reader.readAsDataURL(file);
+  }
+
+  // Handle drag-and-drop functionality
+  const dropArea = document.querySelector(".border-dashed");
+  dropArea.addEventListener("dragover", function (e) {
+    e.preventDefault();
+    dropArea.classList.add("bg-gray-100");
+  });
+  dropArea.addEventListener("dragleave", function () {
+    dropArea.classList.remove("bg-gray-100");
+  });
+  dropArea.addEventListener("drop", function (e) {
+    e.preventDefault();
+    dropArea.classList.remove("bg-gray-100");
+
+    const file = e.dataTransfer.files[0];
+    const reader = new FileReader();
+    reader.onload = function (event) {
+      const imgElement = document.getElementById("preview-img");
+      const previewDiv = document.getElementById("image-preview");
+
+      imgElement.src = event.target.result;
+      previewDiv.classList.remove("hidden"); // Show preview div
+    };
+    reader.readAsDataURL(file);
+  });
+
+  // Camera functionality
+  const openCameraBtn = document.getElementById("open-camera");
+  const cameraContainer = document.getElementById("camera-container");
+  const cameraPreview = document.getElementById("camera-preview");
+  const captureBtn = document.getElementById("capture-btn");
+  const cancelCameraBtn = document.getElementById("cancel-camera");
+  const cameraImageData = document.getElementById("camera-image-data");
+  const fileInput = document.getElementById("file-input");
+
+  let stream = null;
+
+  // Open camera button click
+  openCameraBtn.addEventListener("click", async () => {
+    try {
+      // Access camera
+      stream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: "environment" }, // Use back camera
+      });
+
+      // Show camera container
+      cameraContainer.classList.remove("hidden");
+      cameraPreview.srcObject = stream;
+    } catch (err) {
+      console.error("Error accessing camera:", err);
+      alert("Tidak dapat mengakses kamera. Pastikan Anda memberikan izin.");
+    }
+  });
+
+  // Capture button click
+  captureBtn.addEventListener("click", () => {
+    const canvas = document.createElement("canvas");
+    const context = canvas.getContext("2d");
+
+    // Set canvas dimensions same as video
+    canvas.width = cameraPreview.videoWidth;
+    canvas.height = cameraPreview.videoHeight;
+
+    // Draw current video frame to canvas
+    context.drawImage(cameraPreview, 0, 0, canvas.width, canvas.height);
+
+    // Convert canvas to data URL
+    const imageData = canvas.toDataURL("image/jpeg");
+
+    // Store image data in hidden input
+    cameraImageData.value = imageData;
+
+    // Show preview
+    const previewImg = document.getElementById("preview-img");
+    const previewDiv = document.getElementById("image-preview");
+    previewImg.src = imageData;
+    previewDiv.classList.remove("hidden");
+
+    // Clear file input
+    fileInput.value = "";
+
+    // Stop camera and hide container
+    closeCamera();
+  });
+
+  // Cancel camera button click
+  cancelCameraBtn.addEventListener("click", () => {
+    closeCamera();
+  });
+
+  // Function to stop camera and clean up
+  function closeCamera() {
+    if (stream) {
+      const tracks = stream.getTracks();
+      tracks.forEach((track) => track.stop());
+      stream = null;
+    }
+    cameraContainer.classList.add("hidden");
+  }
+
+  // Modify form submission to handle both file and camera input
+  document.querySelector("form").addEventListener("submit", function (e) {
+    // If camera image is used, clear file input
+    if (cameraImageData.value) {
+      fileInput.disabled = true;
+    }
+  });
+</script>
+{% endblock %}
