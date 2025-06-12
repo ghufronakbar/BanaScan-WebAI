@@ -10,7 +10,7 @@ import uuid
 from io import BytesIO
 from PIL import Image
 
-label_map = {0:"Pisang Segar", 1:"Pisang Tidak Segar", 2:'Non Pisang'}
+label_map = {0:"Pisang Segar", 1:"Pisang Tidak Segar"}
 model = load_model('model.h5')
 
 
