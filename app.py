@@ -112,8 +112,14 @@ def predict_and_render(filepath, filename):
     # Predict using your model
     prediction = model.predict(img_array)
     class_index = np.argmax(prediction)
-    label = label_map[class_index]
+    label = "Pisang Segar"
     accuracy = float(prediction[0][class_index])
+    if accuracy < 0.5:
+        label = "Pisang Segar"
+        accuracy = 100 - (accuracy * 100)
+    else:
+        label = "Pisang Tidak Segar"
+        accuracy = accuracy * 100
     
     # Prepare the data for rendering in result.html
     data = {

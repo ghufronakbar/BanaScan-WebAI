@@ -6,6 +6,7 @@ block content %}
   <div
     class="bg-white flex flex-col justify-between h-fit py-2 md:py-4 px-4 md:px-8 text-sm gap-2 w-full min-h-screen items-center relative"
   >
+    <!-- Judul dan Penjelasan -->
     <div class="w-full flex flex-col gap-4 z-10 bg-transparent">
       <div class="text-5xl font-bold flex flex-row gap-2 items-center">
         <img
@@ -16,22 +17,37 @@ block content %}
         Hasil Klasifikasi
       </div>
       <div class="text-xl">
-        Berikut adalah hasil klasifikasi tingkat kematangan pisang berdasarkan
+        Berikut adalah hasil klasifikasi tingkat kesegaran pisang berdasarkan
         gambar yang Anda unggah.
       </div>
     </div>
+
+    <!-- Gambar dan Hasil -->
     <div class="w-full flex flex-col gap-4 z-10 bg-transparent mt-12">
       <div class="text-3xl font-bold">Gambar yang Anda Unggah</div>
-      <div class="flex flex-col md:flex-row gap-8">
-        <div
-          class="w-full md:w-1/2 !aspect-square flex flex-col items-center border border-gray-300 border-2 border-dashed border-[#2f9fd1] rounded-lg p-4 overflow-hidden"
-        >
-          <img
-            src="{{ data.image_url }}"
-            alt="Logo"
-            class="w-full h-full object-cover"
-          />
+      <div class="flex flex-col md:flex-row gap-2">
+        <!-- Gambar Pisang -->
+        <div class="flex flex-col gap-4 w-full md:w-1/2">
+          <div
+            class="w-full h-auto !aspect-[16/9] flex flex-col items-center justify-center border border-gray-300 border-2 border-dashed border-[#2f9fd1] rounded-lg p-4 overflow-hidden"
+          >
+            <img
+              src="{{ data.image_url }}"
+              alt="Uploaded Banana Image"
+              class="img-responsive object-cover rounded-lg"
+              onload="adjustImageFit(this)"
+            />
+          </div>
+          <!-- Tombol Text to Speech -->
+          <button
+            onclick="speakResult()"
+            class="bg-yellow-500 text-white px-4 py-2 rounded-md w-full transition-all duration-300 hover:bg-yellow-400 border border-yellow-500 flex items-center justify-center"
+          >
+            🔊 Dengarkan Hasil
+          </button>
         </div>
+
+        <!-- Hasil Klasifikasi -->
         <div class="w-full md:w-1/2 flex flex-col gap-2">
           <div class="text-3xl font-bold">
             <span
@@ -41,12 +57,14 @@ block content %}
             </span>
             Hasil Klasifikasi
           </div>
-          <div class="text-3xl text-neutral-700">{{data.label}}</div>
+          <div class="text-3xl text-neutral-700">{{ data.label }}</div>
           <div class="text-lg">
-            Akurasi: <span class="font-bold">{{data.accuracy}}%</span>
+            Akurasi: <span class="font-bold">{{ data.accuracy }}%</span>
           </div>
         </div>
       </div>
+
+      <!-- Tombol Navigasi -->
       <div class="flex flex-col md:flex-row gap-4 w-full">
         <a
           class="bg-[#2f9fd1] text-white px-4 py-2 rounded-md w-full md:w-1/2 transition-all duration-300 hover:bg-white hover:text-[#2f9fd1] border border-[#2f9fd1] flex items-center justify-center"
@@ -63,8 +81,9 @@ block content %}
       </div>
     </div>
   </div>
-  
 </section>
+
+<!-- Script -->
 <script>
   const checkbox = document.getElementById("checkbox");
   const savedCheckboxState = localStorage.getItem("PLAYSOUND");
@@ -73,6 +92,38 @@ block content %}
     checkbox.addEventListener("change", () => {
       localStorage.setItem("PLAYSOUND", checkbox.checked);
     });
+  }
+
+  function adjustImageFit(img) {
+    const isHorizontal = img.naturalWidth > img.naturalHeight;
+    if (isHorizontal) {
+      img.classList.add("fit-width");
+    } else {
+      img.classList.add("fit-height");
+    }
+    img.classList.remove("img-responsive");
+  }
+
+  // Fungsi Text-to-Speech
+  function speakResult() {
+    try {
+      const accuracy = "{{ data.accuracy }}";
+      const statusText = "{{data.status}}"
+        ? "pisang dinyatakan segar"
+        : "pisang dinyatakan tidak segar";
+
+      const message = `Berdasarkan gambar yang Anda unggah, ${statusText}. Dengan tingkat akurasi sebesar ${accuracy.slice(
+        0,
+        4
+      )} persen.`;
+
+      const utterance = new SpeechSynthesisUtterance(message);
+      utterance.lang = "id-ID";
+      speechSynthesis.cancel(); // Hentikan suara sebelumnya jika ada
+      speechSynthesis.speak(utterance);
+    } catch (error) {
+      console.error("ERROR SPEAKING:", error);
+    }
   }
 </script>
 {% endblock %}
